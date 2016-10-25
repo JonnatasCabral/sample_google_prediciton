@@ -121,20 +121,19 @@ def main(argv):
         result = api.analyze(id=flags.model_id, project=flags.project_id).execute()
         print('Analyze results:')
         pprint.pprint(result)
-
         # Make some predictions using the newly trained model.
         print_header('Making some predictions')
-        for sample_text in ['mucho bueno', 'bonjour, mon cher ami']:
-            body = {'input': {'csvInstance': [sample_text]}}
-            result = api.predict(
-                body=body, id=flags.model_id, project=flags.project_id).execute()
-            print('Prediction results for "%s"...' % sample_text)
-            pprint.pprint(result)
+        sample_text = "  Julgado improcedente o pedido   Ante o exposto e por tudo mais que nos autos consta, JULGO IMPROCEDENTE o pedido constante da inicial, uma vez que o(a) autor(a) não conseguiu provar os fatos constitutivos de seu direito.Custas e honorários sucumbenciais pela parte autora, estes a base de 10% (dez por cento) sobre o valor da causa, observado o disposto no art. 12 da Lei 1.060/50.P.R.I.Após o trânsito em julgado, dê-se baixa na distribuição e arquive-se, observadas as formalidades legais, caso nada seja requestado." 
+        body = {'input': {'csvInstance': [sample_text]}}
+        result = api.predict(
+            body=body, id=flags.model_id, project=flags.project_id).execute()
+        print('Prediction results for "%s"...' % sample_text)
+        pprint.pprint(result)
 
         # Delete model.
-        print_header('Deleting model')
-        result = api.delete(id=flags.model_id, project=flags.project_id).execute()
-        print('Model deleted.')
+        # print_header('Deleting model')
+        # result = api.delete(id=flags.model_id, project=flags.project_id).execute()
+        # print('Model deleted.')
 
     except client.AccessTokenRefreshError:
         print ('The credentials have been revoked or expired, please re-run '
