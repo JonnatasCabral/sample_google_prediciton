@@ -69,17 +69,21 @@ def print_header(line):
     print(header_line)
 
 
-def main(argv):
-    # If you previously ran this app with an earlier version of the API
-    # or if you change the list of scopes below, revoke your app's permission
-    # here: https://accounts.google.com/IssuedAuthSubTokens
-    # Then re-run the app to re-authorize it.
+def autentication(argv):
     service, flags = sample_tools.init(
       argv, 'prediction', 'v1.6', __doc__, __file__, parents=[argparser],
       scope=(
           'https://www.googleapis.com/auth/prediction',
           'https://www.googleapis.com/auth/devstorage.read_only'))
+    return service, flags
 
+
+def trainmodel(argv):
+    # If you previously ran this app with an earlier version of the API
+    # or if you change the list of scopes below, revoke your app's permission
+    # here: https://accounts.google.com/IssuedAuthSubTokens
+    # Then re-run the app to re-authorize it.
+    service, flags = autentication(argv)
     try:
         # Get access to the Prediction API.
         api = service.trainedmodels()
@@ -115,12 +119,25 @@ def main(argv):
             print('Training completed:')
             pprint.pprint(status)
             break
+            # Describe model.
+            print_header('Fetching model description')
+            result = api.analyze(id=flags.model_id, project=flags.project_id).execute()
+            print('Analyze results:')
+            pprint.pprint(result)
 
-        # Describe model.
-        print_header('Fetching model description')
-        result = api.analyze(id=flags.model_id, project=flags.project_id).execute()
-        print('Analyze results:')
-        pprint.pprint(result)
+    except client.AccessTokenRefreshError:
+        print ('The credentials have been revoked or expired, please re-run '
+               'the application to re-authorize.')
+
+
+def predict(argv):
+
+    service, flags = autentication(argv)
+
+    try:
+            # Get access to the Prediction API.
+        api = service.trainedmodels()
+
         # Make some predictions using the newly trained model.
         print_header('Making some predictions')
         sample_text = "  Julgado improcedente o pedido   Ante o exposto e por tudo mais que nos autos consta, JULGO IMPROCEDENTE o pedido constante da inicial, uma vez que o(a) autor(a) não conseguiu provar os fatos constitutivos de seu direito.Custas e honorários sucumbenciais pela parte autora, estes a base de 10% (dez por cento) sobre o valor da causa, observado o disposto no art. 12 da Lei 1.060/50.P.R.I.Após o trânsito em julgado, dê-se baixa na distribuição e arquive-se, observadas as formalidades legais, caso nada seja requestado." 
@@ -136,9 +153,26 @@ def main(argv):
         # print('Model deleted.')
 
     except client.AccessTokenRefreshError:
-        print ('The credentials have been revoked or expired, please re-run '
+        print ('The credentials have been revoked or expired, please re-run'
                'the application to re-authorize.')
 
 
+def delmodel(argv):
+
+    service, flags = autentication(argv)
+
+    try:
+        # Get access to the Prediction API.
+        api = service.trainedmodels()
+
+        # Delete model.
+        print_header('Deleting model')
+        result = api.delete(id=flags.model_id, project=flags.project_id).execute()
+        print('Model deleted.')
+
+    except client.AccessTokenRefreshError:
+        print ('The credentials have been revoked or expired, please re-run'
+               'the application to re-authorize.')
+
 if __name__ == '__main__':
-    main(sys.argv)
+    trainmodel(sys.argv)
