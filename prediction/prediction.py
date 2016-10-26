@@ -147,11 +147,6 @@ def predict(argv):
         print('Prediction results for "%s"...' % sample_text)
         pprint.pprint(result)
 
-        # Delete model.
-        # print_header('Deleting model')
-        # result = api.delete(id=flags.model_id, project=flags.project_id).execute()
-        # print('Model deleted.')
-
     except client.AccessTokenRefreshError:
         print ('The credentials have been revoked or expired, please re-run'
                'the application to re-authorize.')
