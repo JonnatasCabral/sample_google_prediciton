@@ -115,7 +115,6 @@ def train_model(argv):
 
 
 def predict(argv):
-    import ipdb; ipdb.set_trace()
     service, flags = autentication(argv)
 
     try:
