@@ -1,20 +1,4 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-# Copyright 2014 Google Inc. All Rights Reserved.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """Simple command-line sample for the Google Prediction API
 Command-line application that trains on your input data. This sample does
 the same thing as the Hello Prediction! example. You might want to run
@@ -25,7 +9,7 @@ You can also get help on all the command-line flags the program understands
 by running:
   $ python prediction.py --help
 To get detailed log output run:
-  $ python prediction.py --logging_level=DEBUG
+  $ python func prediction.py --logging_level=DEBUG
 """
 
 from __future__ import print_function
@@ -49,6 +33,10 @@ SLEEP_TIME = 10
 
 # Declare command-line flags.
 argparser = argparse.ArgumentParser(add_help=False)
+argparser.add_argument(
+    'func',
+    help='Function that will be executed')
+
 argparser.add_argument(
     'object_name',
     help='Full Google Storage path of csv data (ex bucket/object)')
@@ -78,11 +66,8 @@ def autentication(argv):
     return service, flags
 
 
-def trainmodel(argv):
-    # If you previously ran this app with an earlier version of the API
-    # or if you change the list of scopes below, revoke your app's permission
-    # here: https://accounts.google.com/IssuedAuthSubTokens
-    # Then re-run the app to re-authorize it.
+def train_model(argv):
+
     service, flags = autentication(argv)
     try:
         # Get access to the Prediction API.
@@ -118,7 +103,6 @@ def trainmodel(argv):
             # Job has completed.
             print('Training completed:')
             pprint.pprint(status)
-            break
             # Describe model.
             print_header('Fetching model description')
             result = api.analyze(id=flags.model_id, project=flags.project_id).execute()
@@ -131,16 +115,22 @@ def trainmodel(argv):
 
 
 def predict(argv):
-
+    import ipdb; ipdb.set_trace()
     service, flags = autentication(argv)
 
     try:
             # Get access to the Prediction API.
         api = service.trainedmodels()
 
+        # confusion matriz
+        print_header('Fetching model description')
+        result = api.analyze(id=flags.model_id, project=flags.project_id).execute()
+        print('Analyze results:')
+        pprint.pprint(result)
+
         # Make some predictions using the newly trained model.
         print_header('Making some predictions')
-        sample_text = "  Julgado improcedente o pedido   Ante o exposto e por tudo mais que nos autos consta, JULGO IMPROCEDENTE o pedido constante da inicial, uma vez que o(a) autor(a) não conseguiu provar os fatos constitutivos de seu direito.Custas e honorários sucumbenciais pela parte autora, estes a base de 10% (dez por cento) sobre o valor da causa, observado o disposto no art. 12 da Lei 1.060/50.P.R.I.Após o trânsito em julgado, dê-se baixa na distribuição e arquive-se, observadas as formalidades legais, caso nada seja requestado." 
+        sample_text = " Homologada a Transação   Ante o exposto, HOMOLOGO o acordo de págs. 214/215, POR SENTENÇA, com fundamento no artigo 487, III, b do CPC.Honorários na forma acordada entre as partes.Custas pela parte ré, caso ainda exista alguma a recolherP. R. I. Recolhidas as custas e transitado em julgado, arquivem-se os autos com as cautelas legais"
         body = {'input': {'csvInstance': [sample_text]}}
         result = api.predict(
             body=body, id=flags.model_id, project=flags.project_id).execute()
@@ -152,7 +142,7 @@ def predict(argv):
                'the application to re-authorize.')
 
 
-def delmodel(argv):
+def del_model(argv):
 
     service, flags = autentication(argv)
 
@@ -170,4 +160,12 @@ def delmodel(argv):
                'the application to re-authorize.')
 
 if __name__ == '__main__':
-    trainmodel(sys.argv)
+    if 'train' in sys.argv:
+        sys.argv.pop(1)
+        train_model(sys.argv)
+    elif 'predict' in sys.argv:
+        sys.argv.pop(1)
+        predict(sys.argv)
+    elif 'del' in sys.argv:
+        sys.argv.pop(1)
+        del_model(sys.argv)
