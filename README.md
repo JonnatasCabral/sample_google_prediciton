@@ -1,12 +1,12 @@
 # Using 
 
-### Quick start in Google API 
+### Quickstart in Google API 
 
 - [QuickStart Google API](https://cloud.google.com/prediction/docs/quickstart) 
 
 - [Overview](http://cloudacademy.com/blog/google-prediction-api/)
 
-### Before run
+### Before to run
 
 Paste `cliente_secrets.json` at `/prediction/`.
 
