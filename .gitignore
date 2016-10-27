@@ -91,3 +91,4 @@ ENV/
 *.dat
 
 scripts/
+*/client_secrets.json

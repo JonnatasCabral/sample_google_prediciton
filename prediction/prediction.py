@@ -33,9 +33,6 @@ SLEEP_TIME = 10
 
 # Declare command-line flags.
 argparser = argparse.ArgumentParser(add_help=False)
-argparser.add_argument(
-    'func',
-    help='Function that will be executed')
 
 argparser.add_argument(
     'object_name',
@@ -129,7 +126,7 @@ def predict(argv):
 
         # Make some predictions using the newly trained model.
         print_header('Making some predictions')
-        sample_text = " Homologada a Transação   Ante o exposto, HOMOLOGO o acordo de págs. 214/215, POR SENTENÇA, com fundamento no artigo 487, III, b do CPC.Honorários na forma acordada entre as partes.Custas pela parte ré, caso ainda exista alguma a recolherP. R. I. Recolhidas as custas e transitado em julgado, arquivem-se os autos com as cautelas legais"
+        sample_text = " Sample text to predict"
         body = {'input': {'csvInstance': [sample_text]}}
         result = api.predict(
             body=body, id=flags.model_id, project=flags.project_id).execute()
