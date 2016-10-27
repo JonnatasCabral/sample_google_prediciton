@@ -2,8 +2,9 @@
 
 ### Quick start in Google API 
 
-[QuickStart Google API](https://cloud.google.com/prediction/docs/quickstart) 
-[Overview](http://cloudacademy.com/blog/google-prediction-api/)
+- [QuickStart Google API](https://cloud.google.com/prediction/docs/quickstart) 
+
+- [Overview](http://cloudacademy.com/blog/google-prediction-api/)
 
 ### Before run
 
