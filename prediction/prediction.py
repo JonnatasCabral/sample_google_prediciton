@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Simple command-line sample for the Google Prediction API
-Command-line application that trains on your input data. This sample does
-the same thing as the Hello Prediction! example. You might want to run
-the setup.sh script to load the sample data to Google Storage.
+"""
 Usage:
   $ python prediction.py "bucket/object" "model_id" "project_id"
 You can also get help on all the command-line flags the program understands
@@ -115,7 +112,7 @@ def predict(argv):
     service, flags = autentication(argv)
 
     try:
-            # Get access to the Prediction API.
+        # Get access to the Prediction API.
         api = service.trainedmodels()
 
         # confusion matriz
